@@ -1,0 +1,72 @@
+#!/usr/bin/python3
+
+import sys #to read command line arguments
+import json
+PATH = '/home/superuser/Python_Training_UST/Sept_3/netman/bin'
+#sys.argv  Its a list of arguments
+#0 -> command
+#1 ->first arguments
+#2 ->second arg and so on
+def help_msg():
+	print("Wrong option")
+	print("Usage:netman.py -[als] argument")
+	print("Examples:")
+	print('netman -a "command:description"')
+try:
+	if sys.argv[1] == "-a":#add element
+		lst=sys.argv[2].split(":")	
+		print(lst)
+		with open(f"{PATH}/cmd.json","r") as fd:
+			data = fd.read()
+			print(data)
+			if data and data is not None:
+				data = json.loads(data)
+			else:
+				data = []
+			with open(f"{PATH}/cmd.json","w") as fdw:
+				data.append(lst)
+				print(data)
+				fdw.write(json.dumps(data))
+	elif sys.argv[1] == "-l":#display file
+		with open(f"{PATH}/cmd.json","r") as fd:
+			data = fd.read()
+			if data:
+				for i in json.loads(data):
+					print(f"{i[0]} : {i[1]}")
+			else:
+				print("No Info")
+	elif sys.argv[1] == "-k":#search element
+		with open(f"{PATH}/cmd.json","r") as fd:
+			flag = 0
+			data = fd.read()
+			if data:
+				for i in json.loads(data):
+					temp=list(filter(lambda x: x in i[1] , sys.argv[2].split(" ")))
+					if temp:
+						flag = 1
+						print(f"{i[0]} : {i[1]}")
+					else:
+						continue
+			if flag == 0:
+				print("Not found")
+				
+	elif sys.argv[1] == "-d":#delete element from file
+		with open(f"{PATH}/cmd.json","r") as fd:
+			data = fd.read()
+			if data:
+				dataa = json.loads(data)
+				print(type(json.loads(data)))
+				for i in json.loads(data):
+					temp=list(filter(lambda x: x in i[1] , sys.argv[2].split(" ")))
+					if temp:
+						dataa.remove(i)
+					else:
+						continue
+				print("data",dataa)
+				with open(f"{PATH}/cmd.json","w") as fd:
+					fd.write(json.dumps(dataa))
+
+	else:
+		help_msg()
+except:	
+	help_msg()
