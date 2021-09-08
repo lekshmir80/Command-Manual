@@ -2,7 +2,9 @@
 
 import sys #to read command line arguments
 import json
+import os
 PATH = '/home/superuser/Python_Training_UST/Sept_3/netman/bin'
+os.system('banner Command Manual')
 #sys.argv  Its a list of arguments
 #0 -> command
 #1 ->first arguments
